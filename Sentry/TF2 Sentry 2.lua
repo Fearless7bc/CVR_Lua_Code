@@ -42,7 +42,7 @@ function GetTargetedPlayer(position, forward, maxAngle)
         local distanceRaycastCheck = UnityEngine.Vector3.Distance(RaycastChecker.position, hitPoint)
         local distancePlayer = UnityEngine.Vector3.Distance(RaycastChecker.position, v.player.GetPosition())
         local playerAngle = UnityEngine.Vector3.Angle(forward, v.point - position)
-        -- Raycast checks if it lands farther than the player, if it does it has LOS. If it lands shorter than it hit a wall.
+        -- Raycast checks if it lands farther than the player, if it does it has LOS. If it lands shorter then it hit a wall.
         if distanceRaycastCheck >= distancePlayer and playerAngle <= maxAngle then
             targetedPlayer = v.player
             break
@@ -90,7 +90,7 @@ function Update()
         local playerViewPos = Player.GetViewPointPosition()
         local playerMiddle = (playerViewPos.y - playerPos.y) / 2
         local distanceFrom = UnityEngine.Vector3.Distance(playerPos, Sight.transform.position) -- Distance from turret
-        if Animator.GetFloat("State") <= 1 then -- If in search or locked state, target nearest player
+        if Animator.GetFloat("State") <= 1 then -- If in search or locked state, target nearest player within LOS
             if distanceFrom <= MaxRange then -- If within range target player
                 Spawnable.SetValue(1,1) -- If in range, locks onto player
                 Target1.transform.position = UnityEngine.NewVector3(playerPos.x, playerPos.y + playerMiddle, playerPos.z)
