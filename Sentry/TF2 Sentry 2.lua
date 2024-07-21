@@ -42,6 +42,7 @@ function GetTargetedPlayer(position, forward, maxAngle)
         local distanceRaycastCheck = UnityEngine.Vector3.Distance(RaycastChecker.position, hitPoint)
         local distancePlayer = UnityEngine.Vector3.Distance(RaycastChecker.position, v.player.GetPosition())
         local playerAngle = UnityEngine.Vector3.Angle(forward, v.point - position)
+        -- Raycast checks if it lands farther than the player, if it does it has LOS. If it lands shorter than it hit a wall.
         if distanceRaycastCheck >= distancePlayer and playerAngle <= maxAngle then
             targetedPlayer = v.player
             break
