@@ -10,7 +10,7 @@ end
 
 -- The bit32 is exposed without importing. It's useful to calculate bit operations
 
--- Calculate the layer mask for water
+-- Calculate the layer mask for the default layer
 local onlyDefaultMask = bit32.lshift(1, CVR.CVRLayers.Default)
 
 -- Calculate the layer mask for the remote players
@@ -24,16 +24,17 @@ local maxDistance = 100.0
 
 function OnPostLateUpdate()
 
-    -- Only raycast every 200 frames
+    -- Only raycast every x frames
     if UnityEngine.Time.frameCount % 10 ~= 0 then
         return
     end
     
-    -- Get the position of the local player view point
+    -- Get the position of the local player view point (this setup has mixed results for rotation of raycast)
     --local origin = PlayerAPI.LocalPlayer.GetViewPointPosition()
     -- Convert rotation to a forward direction vector
     --local forward = PlayerAPI.LocalPlayer.GetViewPointRotation() * UnityEngine.Vector3.forward
 
+    -- Attaching the object the raycast comes from, to the head, results in consistent raycast direction
     local origin = HeadAttachTransform.position
     local forward = HeadAttachTransform.rotation * UnityEngine.Vector3.forward
 
