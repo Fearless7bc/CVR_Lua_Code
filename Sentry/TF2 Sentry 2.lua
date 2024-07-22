@@ -25,11 +25,11 @@ function GetTargetedPlayer(position, forward, maxAngle)
     -- Fill own table and sort players by distance from close to far away
     local distanceTable = {}
     for _,v in ipairs(PlayerAPI.AllPlayers) do -- v is the player
-        --if not v.IsLocal then
+        if not v.IsLocal then -- This makes it ignore the prop spawner. It will not see them as a target
             local playerPoint = (v.GetPosition() + v.GetViewPointPosition()) * 0.5 -- player's center
             local playerDistance = UnityEngine.Vector3.Distance(playerPoint, position)
             table.insert(distanceTable, { player = v, point = playerPoint, distance = playerDistance })
-        --end
+        end
     end
     table.sort(distanceTable, DistanceSort)
     
