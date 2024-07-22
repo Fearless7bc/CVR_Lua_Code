@@ -47,7 +47,7 @@ function OnPostLateUpdate()
     if IsUsing == false then
         return
     end
-    -- Only raycast every 1 frames
+    -- Only raycast every x frames
     if UnityEngine.Time.frameCount % 1 ~= 0 then
         return
     end
@@ -58,12 +58,13 @@ function OnPostLateUpdate()
     local origin = RaycastRoot.transform.position
     local forward = RaycastRoot.transform.rotation * -UnityEngine.Vector3.up
 
-    -- Shoot a raycast from the RaycastRoot object, that can hit the layers Default and remotePlayers, and hits colliders with IsTrigger enabled
+    -- Shoot a raycast from the RaycastRoot object, that can hit the layers Default and Water, and hits colliders with IsTrigger enabled
     local hit, hitInfo = UnityEngine.Physics.Raycast(origin, forward, maxDistance, onlyDefaultAndWaterMask, UnityEngine.QueryTriggerInteraction.Collide)
  
     -- Check if the raycast hit something
     if hit == false then
         --print("Raycast failed.")
+        -- Set an animator value to know when raycast hit nothing, or is out of range
         Spawnable.SetValue(0, -1)
     end
 
@@ -76,14 +77,17 @@ function OnPostLateUpdate()
         local hitDistance = hitInfo.distance
         
         --print("Hit point: " .. hitPoint.ToString() .. " | Hit normal: " .. hitNormal.ToString() .. " | Hit distance: " .. hitDistance)
+        -- Setting an object to where the raycast hit, and to normal direction of surface (used for particle effects on ground)
         RaycastHit.transform.position = hitPoint
         RaycastHit.transform.rotation = UnityEngine.Quaternion.Slerp(RaycastHit.transform.rotation, UnityEngine.Quaternion.FromToRotation(UnityEngine.Vector3.up, hitNormal), 0.25)
         --Angle = UnityEngine.Vector3.Angle(hitNormal, JetboardRoot.transform.forward)
         if Animator.GetBool("isVR") == false then
             --JetboardRoot.transform.rotation = UnityEngine.Quaternion.FromToRotation(JetboardRoot.transform.up, hitNormal) * JetboardRoot.transform.rotation;
+            -- Used to rotate the hoverboard to raycast normal, for desktop users to go up slopes
             L_target = UnityEngine.Quaternion.FromToRotation(JetboardRoot.transform.up, hitNormal) * JetboardRoot.transform.rotation;
             JetboardRoot.transform.rotation = UnityEngine.Quaternion.Slerp(JetboardRoot.transform.rotation, L_target, UnityEngine.Mathf.Clamp01(15 * UnityEngine.Time.deltaTime));
         end
+        -- Set a variable for the animator to know the height, used to adjust phsyics for hover
         Spawnable.SetValue(0, hitDistance)
     end
 end
