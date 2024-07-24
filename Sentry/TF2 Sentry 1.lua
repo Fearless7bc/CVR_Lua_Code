@@ -10,9 +10,7 @@ function Start()
     Target2 = BoundObjects.Target2
     Target3 = BoundObjects.Target3
     RaycastChecker = BoundObjects.RaycastChecker.transform
-    if IsSpawnedByMe == true then
-        Animator.SetBool("SyncThing", true)
-    end
+    SyncAttach = BoundObjects.SyncAttach:CustomTrigger()
 end
 
 -- Function to get the player your gun is aiming at within a N-degree angle
